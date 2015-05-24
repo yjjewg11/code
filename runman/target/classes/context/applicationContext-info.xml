@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+	default-lazy-init="true" >
+
+<!-- Hibernate配置 -->
+<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="lobHandler" ref="${lob.handler}"/>
+	
+		<property name="dataSource" ref="${dataSource.type}" />
+		<property name="namingStrategy">
+			<bean class="org.hibernate.cfg.ImprovedNamingStrategy" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.connection.release_mode">after_transaction</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+				<prop key="hibernate.cache.provider_configuration_file_resource_path">ehcache/ehcache-hibernate-local.xml</prop>
+				<!-- 解决hibernate 中的Jar包与应用服务器冲突//-->
+				<prop key="hibernate.validator.apply_to_ddl">false</prop> 
+				<prop key="hibernate.validator.autoregister_listeners">false</prop>
+			</props>
+		</property>
+		<property name="packagesToScan" value="com.company.news.entity.*" />
+		<!-- hbm.xml文件加载方式-->
+         <property name="mappingLocations">
+            <list>
+				<value>classpath:/com/sobey/**/*.hbm.xml</value>
+				<value>classpath:/com/sobey/**/*.hbm.info.xml</value>
+            </list>
+        </property>
+
+	</bean>
+<!-- Hibernate配置 -->
+<bean id="sessionFactoryUpgrade" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="lobHandler" ref="${lob.handler}"/>
+	
+		<property name="dataSource" ref="jdbcDataSourceUpgrade" />
+		<property name="namingStrategy">
+			<bean class="org.hibernate.cfg.ImprovedNamingStrategy" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.connection.release_mode">after_transaction</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+				<prop key="hibernate.cache.provider_configuration_file_resource_path">ehcache/ehcache-hibernate-local.xml</prop>
+				<!-- 解决hibernate 中的Jar包与应用服务器冲突//-->
+				<prop key="hibernate.validator.apply_to_ddl">false</prop> 
+				<prop key="hibernate.validator.autoregister_listeners">false</prop>
+			</props>
+		</property>
+		<property name="packagesToScan" value="com.company.news.entity.npms.upgrade.*" />
+		<!-- hbm.xml文件加载方式-->
+         <property name="mappingLocations">
+            <list>
+				<value>classpath:/com/sobey/**/*.hbm.npms.upgrade.xml</value>
+            </list>
+        </property>
+
+</bean>
+
+<bean id="upgradeDao"  class="com.company.news.dao.npms.UpgradeDao">
+	<property name="sessionFactory" ref="sessionFactoryUpgrade"></property>
+</bean>
+
+<!-- 文稿 -->
+<bean id="coldocService"  class="com.company.news.service.info.ColdocService"/>
+<bean id="docShareService"  class="com.company.news.service.npms.DocShareService"/>
+
+<!-- 选题-->
+<bean id="listplanService"  class="com.company.news.service.info.ListplanService"/>
+<!-- 串联单 -->
+<bean id="llistService"  class="com.company.news.service.info.LlistService"/>
+<!--公共模块: 用户 -->
+<bean id="userinfoService"  class="com.company.news.service.info.UserinfoService"/>
+
+<!-- 文稿和通稿共有功能-->
+<bean id="docService"  class="com.company.news.service.info.DocService"/>
+<!-- 公共模块:操作记录 -->
+<bean id="newsEntityOperaFlow"  class="com.company.news.service.npms.NewsEntityOperaFlow"/>
+
+<!--公共模块: 回收站 -->
+<bean id="transhboxServcice"  class="com.company.news.service.npms.TranshboxServcice"/>
+<!-- 采访 -->
+<bean id="coverplanServcice"  class="com.company.news.service.info.CoverplanServcice"/>
+
+<!-- 通稿 -->
+<bean id="pubdocService"  class="com.company.news.service.info.PubdocService"/>
+<!-- 系列报道
+<bean id="seriesreportService"  class="com.company.news.service.npms.SeriesreportService"/> -->
+
+<!-- 阶段性重点
+<bean id="stagekeyService"  class="com.company.news.service.npms.StagekeyService"/> -->
+
+<!-- 采访要求 
+<bean id="coverRequireServcice"  class="com.company.news.service.npms.CoverRequireServcice"/>-->
+
+<!-- 权限类加载开始 -->
+<bean id="coldocPopedomService"  class="com.company.news.popedom.info.ColdocPopedomService"/>
+<bean id="listplanPopedomService"  class="com.company.news.popedom.info.ListplanPopedomService"/>
+<bean id="llistPopedomService"  class="com.company.news.popedom.info.LlistPopedomService"/>
+
+<!-- 附件功能-->
+<bean id="attachmentService"  class="com.company.news.service.info.AttachmentService"/>
+
+<!-- 串联单审查 -->
+<bean id="llistcheckService"  class="com.company.news.service.LlistcheckService"/>
+
+<!-- 节目审查-->
+<bean id="videocheckService"  class="com.company.news.service.VideocheckService"/>
+
+<!-- 自动升级功能-->
+<bean id="upgradeService"  class="com.company.news.service.npms.UpgradeService"/>
+
+<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>  
+</beans>

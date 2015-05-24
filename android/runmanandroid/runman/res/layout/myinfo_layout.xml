@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content" style="@style/AppTheme" android:background="@color/floralwhite"
+             android:orientation="vertical">
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:weightSum="1">
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/myinfo_header"
+                      android:drawableTop="@drawable/main_setting_photo_default_icon"
+                      android:drawablePadding="15dip"
+                      android:gravity="center"
+                      android:layout_centerVertical="true"
+                      android:layout_centerHorizontal="true"
+                      android:textColor="@color/gray_b6"
+                      android:textSize="18sp" android:text="unname" android:editable="false"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="女，成都，"
+                    android:id="@+id/myinfo_detail" android:layout_weight="0.63"/>
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="修改资料"
+                    android:id="@+id/modify_myinfo"/>
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:text="新建训练计划"
+                    android:id="@+id/add_training_plan"/>
+        </LinearLayout>
+
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+        <Button
+                android:layout_width="0dp"
+                android:layout_weight="1.0"
+                android:layout_height="wrap_content"
+                android:text="训练计划"
+                android:id="@+id/button_my_traing"/>
+        <Button
+                android:layout_width="0dp"
+                android:layout_weight="1.0"
+                android:layout_height="wrap_content"
+                android:text="教练列表"
+                android:id="@+id/button_coach_list"/>
+
+        <Button
+                android:layout_width="0dp"
+                android:layout_weight="1.0"
+                android:layout_height="wrap_content"
+                android:text="更多"
+                android:id="@+id/button_more"/>
+    </LinearLayout>
+    <com.company.runman.widget.PullToRefreshListView
+            android:id="@+id/listViewMyTraningPlan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cacheColorHint="#00000000"
+            android:fastScrollEnabled="true" android:overScrollFooter="@color/darkgreen"
+            android:overScrollHeader="@color/green"/>
+
+</LinearLayout>

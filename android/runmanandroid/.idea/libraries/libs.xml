@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="libs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../code_lib/runman_andorid_libs/android-support-v4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../code_lib/runman_andorid_libs/Baidu-Frontia-Android-2.0.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../code_lib/runman_andorid_libs/commons-lang-2.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../code_lib/runman_andorid_libs/core.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../code_lib/runman_andorid_libs/gson-2.3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../code_lib/runman_andorid_libs/smack.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../code_lib/runman_andorid_libs/smackx-3.4.1-0cec571.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+	default-lazy-init="true" default-autowire="byName">
+<bean id="processInstanceDAO" class="com.company.fiflow.dao.impl.ProcessInstanceDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="smmModelsDAO" class="com.company.fiflow.dao.impl.SmmModelsDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="taskDAO" class="com.company.fiflow.dao.impl.TaskDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="tokenDAO" class="com.company.fiflow.dao.impl.TokenDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="workflowDefinitionDAO" class="com.company.fiflow.dao.impl.WorkflowDefinitionDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<bean id="workflowRunningService"
+		class="com.company.fiflow.service.impl.WorkflowRunningServiceImpl">
+		<property name="workflowDefinitionService">
+			<ref bean="workflowDefinitionService" />
+		</property>
+		<property name="processInstanceService">
+			<ref bean="processInstanceService" />
+		</property>
+		<property name="tokenService">
+			<ref bean="tokenService" />
+		</property>
+		<property name="taskService">
+			<ref bean="taskService" />
+		</property>
+		<property name="smmModelsService">
+			<ref bean="smmModelsService" />
+		</property>
+	</bean>
+	
+	<bean id="fiflowService" class="com.company.fiflow.service.FIFlowService">
+		<property name="taskService">
+			<ref bean="taskService" />
+		</property>
+		<property name="workflowRunningService">
+			<ref bean="workflowRunningService" />
+		</property>
+		<property name="smmModelsService">
+			<ref bean="smmModelsService" />
+		</property>
+	</bean>
+
+	<bean id="metadataDAO" class="com.company.fiflow.dao.impl.MetadataDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<bean id="taskService" class="com.company.fiflow.service.impl.TaskServiceImpl">
+		
+	</bean>
+	<bean id="newsPlusInService" class="com.company.fiflow.service.impl.NewsPlusInServiceImpl">
+		
+	</bean>
+	<bean id="listplanUpdateStatusDAOImpl" class="com.company.fiflow.dao.impl.ListplanUpdateStatusDAOImpl">
+		
+	</bean>
+	<bean id="docMasterUpdateStatusDAOImpl" class="com.company.fiflow.dao.impl.DocMasterUpdateStatusDAOImpl">
+		
+	</bean>
+	<bean id="pubDocMasterUpdateStatusDAOImpl" class="com.company.fiflow.dao.impl.PubDocMasterUpdateStatusDAOImpl">
+		
+	</bean>
+	<bean id="tokenService" class="com.company.fiflow.service.impl.TokenServiceImpl">
+		
+	</bean>
+	<bean id="workflowDefinitionService" class="com.company.fiflow.service.impl.WorkflowDefinitionServiceImpl">
+	</bean>
+	
+	
+	
+	<bean id="processInstanceService" class="com.company.fiflow.service.impl.ProcessInstanceServiceImpl">
+	</bean>
+	<bean id="smmModelsService" class="com.company.fiflow.service.impl.SmmModelsServiceImpl">
+	</bean>
+	
+
+	<bean id="workflowMetadataService" class="com.company.fiflow.service.impl.WorkflowMetadataServiceImpl">
+	</bean>
+</beans>
