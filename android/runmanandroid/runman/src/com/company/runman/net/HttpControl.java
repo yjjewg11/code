@@ -7,11 +7,27 @@ import com.company.runman.utils.LogHelper;
 import com.company.runman.utils.Tool;
 import com.company.runman.utils.TraceUtil;
 
+import java.io.File;
+
 /**
  * Created by Edison on 2014/6/6.
  */
 public class HttpControl {
 
+    public static HttpReturn execute(File file, String RequestURL) {
+        TraceUtil.traceLog(RequestURL);
+        HttpReturn ret = new HttpReturn();
+        try {
+            ret= NetworkHttpRequest.uploadFile(file,RequestURL);
+        } catch (Exception e) {
+            TraceUtil.traceThrowableLog(e);
+            e.printStackTrace();
+            ret.code = Constant.ResponseCode.TIMEOUT;
+            ret.err = e.getMessage();
+        }
+
+        return ret;
+    }
     public static HttpReturn execute(IRequest request, Context context) {
         HttpReturn ret = new HttpReturn();
         TraceUtil.traceLog(request.getUrl());

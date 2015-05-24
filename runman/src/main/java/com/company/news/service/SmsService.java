@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 
+import com.company.news.ProjectProperties;
 import com.company.news.commons.util.RandomNumberGenerator;
 import com.company.news.entity.TelSmsCode;
 import com.company.news.rest.RestConstants;
@@ -19,6 +20,10 @@ import com.ucpaas.restDemo.SysConfig;
 import com.ucpaas.restDemo.client.JsonReqClient;
 @Service
 public class SmsService  extends AbstractServcice{
+  
+  private static long MINUTE = 1000 * 60L;
+  private static long SMS_TIME_LIMIT = MINUTE * Long.valueOf(ProjectProperties.getProperty(
+          "project.SMS.TIME_LIMIT", "5"));
   //key:tel,value[验证码,时间]
   private static ConcurrentMap<String, Long[]> smscodeMap = new ConcurrentHashMap<String, Long[]>();
   /**
@@ -46,6 +51,14 @@ public class SmsService  extends AbstractServcice{
     TelSmsCode smsdb=(TelSmsCode)this.nSimpleHibernateDao.getObjectByAttribute(TelSmsCode.class,"tel", tel);
     if(smsdb==null){
       smsdb=new TelSmsCode();
+    }else{
+      long timeInterval=TimeUtils.getCurrentTimestamp().getTime()-smsdb.getCreatetime().getTime();
+      if(timeInterval<SMS_TIME_LIMIT){
+        responseMessage.setStatus(RestConstants.Return_ResponseMessage_failed);
+        responseMessage.setMessage("如果没有收到验证码，请在"+SMS_TIME_LIMIT+"分钟后再次进行发送。");
+        return model;
+      }
+      
     }
     smsdb.setTel(tel);
     smsdb.setCreatetime(TimeUtils.getCurrentTimestamp());

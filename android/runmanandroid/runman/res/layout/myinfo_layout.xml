@@ -8,39 +8,45 @@
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" android:weightSum="1">
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:id="@+id/myinfo_header"
-                      android:drawableTop="@drawable/main_setting_photo_default_icon"
-                      android:drawablePadding="15dip"
-                      android:gravity="center"
-                      android:layout_centerVertical="true"
-                      android:layout_centerHorizontal="true"
-                      android:textColor="@color/gray_b6"
-                      android:textSize="18sp" android:text="unname" android:editable="false"/>
-            <TextView
-                    android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+            <ImageView
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:text="女，成都，"
-                    android:id="@+id/myinfo_detail" android:layout_weight="0.63"/>
-            <Button
+                    android:id="@+id/imageView_myhead" android:layout_gravity="center_horizontal"/>
+            <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="修改资料"
-                    android:id="@+id/modify_myinfo"/>
-            <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:text="新建训练计划"
-                    android:id="@+id/add_training_plan"/>
+                    android:layout_height="wrap_content">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="name"
+                        android:id="@+id/name"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="女，成都，"
+                        android:id="@+id/myinfo_detail" android:layout_weight="0.63"/>
+                <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="修改资料"
+                        android:id="@+id/modify_myinfo"/>
+                <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:text="新建训练计划"
+                        android:id="@+id/add_training_plan"/>
+            </LinearLayout>
         </LinearLayout>
 
 
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="wrap_content">
         <Button
                 android:layout_width="0dp"
                 android:layout_weight="1.0"

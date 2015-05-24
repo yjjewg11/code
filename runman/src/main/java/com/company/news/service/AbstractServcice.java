@@ -1,11 +1,9 @@
 package com.company.news.service;
 
-import java.sql.Timestamp;
 import java.util.Properties;
 
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
-import net.sf.json.util.JSONUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.company.news.dao.NSimpleHibernateDao;
-import com.company.news.json.NpmsDateMorpher;
-import com.company.news.springMVC.JsonDateValueProcessor;
 
 public abstract class AbstractServcice {
   public static final String ID_SPLIT_MARK = ",";

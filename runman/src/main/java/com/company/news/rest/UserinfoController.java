@@ -67,6 +67,19 @@ public class UserinfoController extends AbstractRESTController{
         return "";
     }
 
+	   @RequestMapping(value = "/modify", method = RequestMethod.POST)
+	    public String modify( ModelMap model, HttpServletRequest request) {
+	        try {
+	          String bodyJson=RestUtil.getJsonStringByRequest(request);
+	          userinfoService.modify(bodyJson, model, request);
+	        } catch (Exception e) {
+	          e.printStackTrace();
+	          ResponseMessage responseMessage = RestUtil.addResponseMessageForModelMap(model);
+	          responseMessage.setStatus(RestConstants.Return_ResponseMessage_failed);
+	          responseMessage.setMessage(e.getMessage());
+	        }
+	        return "";
+	    }
 	@RequestMapping(value = "/logout", method = RequestMethod.POST)
 	public String logout(ModelMap model, HttpServletRequest request) {
 		// 创建session

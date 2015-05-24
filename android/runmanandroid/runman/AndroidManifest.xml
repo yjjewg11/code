@@ -62,7 +62,9 @@
         <activity android:name="com.company.runman.activity.TrainingPlanDetailActivity"
                   android:launchMode="singleTask"
                 />
-        <activity android:name=".activity.MyInfoActivity"
+        <activity android:name="com.company.runman.activity.MyInfoActivity"
+                  android:launchMode="singleTask"/>
+        <activity android:name="com.company.runman.activity.MyinfoModifyActivity"
                   android:launchMode="singleTask"/>
         <!--<activity android:name="com.company.runman.activity.CodeScanResultActivity"-->
                   <!--android:screenOrientation="portrait"/>-->

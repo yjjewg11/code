@@ -15,6 +15,7 @@ import com.company.news.ProjectProperties;
 import com.company.news.entity.TelSmsCode;
 import com.company.news.entity.User;
 import com.company.news.form.UserLoginForm;
+import com.company.news.jsonform.UserModifyJsonform;
 import com.company.news.jsonform.UserRegJsonform;
 import com.company.news.rest.RestConstants;
 import com.company.news.rest.util.RestUtil;
@@ -125,7 +126,54 @@ public class UserinfoService extends AbstractServcice {
     responseMessage.setMessage("注册成功！");
     return model;
   }
+  /**
+   * 用户修改资料
+   * 
+   * @param entityStr
+   * @param model
+   * @param request
+   * @return
+   */
+  public ModelMap modify(String bodyJson, ModelMap model, HttpServletRequest request) throws Exception {
+    ResponseMessage responseMessage = RestUtil.addResponseMessageForModelMap(model);
+    User userInfo = SessionListener.getUserInfoBySession(request);
+    
+    UserModifyJsonform form = (UserModifyJsonform)this.bodyJsonToFormObject(bodyJson, UserModifyJsonform.class);
+    
+    /**
+     * 如果短信验证码不为空进行验证
+     */
+    if(StringUtils.isBlank(form.getName())){
+        responseMessage.setStatus(RestConstants.Return_ResponseMessage_failed);
+        responseMessage.setMessage("昵称不能为空！");
+        return model;
+      }
+      
+    String attribute = "loginname";
+    User userDB =
+        (User) this.nSimpleHibernateDao.getObjectByAttribute(User.class, attribute, userInfo.getLoginname());
+    if (userDB == null) {
+      responseMessage.setStatus(RestConstants.Return_ResponseMessage_failed);
+      responseMessage.setMessage("异常请求：修改资料失败，数据库没记录。");
+      return model;
+    }
+    //保存
+    Properties properties = (Properties) this.bodyJsonToProperties(bodyJson);
+    RestUtil.copyNotEmptyValueToobj(properties, form, userDB);
 
+    try {
+      this.nSimpleHibernateDao.save(userDB);
+    } catch (DataIntegrityViolationException e) {
+      responseMessage.setStatus(RestConstants.Return_ResponseMessage_failed);
+      responseMessage.setMessage(e.getMessage());
+
+    }
+    
+    SessionListener.getSession(request).setAttribute(RestConstants.Session_UserInfo, userDB);
+    responseMessage.setMessage("修改成功！");
+    putUserInfoReturnToModel(model,request);
+    return model;
+  }
 
   /**
    * 
@@ -242,7 +290,7 @@ public class UserinfoService extends AbstractServcice {
   @Override
   public Class getEntityClass() {
     // TODO Auto-generated method stub
-    return null;
+    return User.class;
   }
 
 }

@@ -31,6 +31,8 @@ public class SessionListener implements HttpSessionListener {
     sessionMapBySessionid.put(s.getId(), s);
   }
   public static HttpSession   getSessionByToken(Object key ){
+    
+   
     return (HttpSession)sessionMap.get(key);
   }
   /**
@@ -42,6 +44,21 @@ public class SessionListener implements HttpSessionListener {
     String token=request.getParameter(RestConstants.Return_access_token);
     String JSESSIONID=request.getParameter(RestConstants.Return_JSESSIONID);
     HttpSession session=null;
+    if(StringUtils.isNotBlank(JSESSIONID)){//使用JSESSIONID
+      session=(HttpSession)sessionMapBySessionid.get(JSESSIONID);
+      if(session!=null)return session;
+      String tmpsession=JSESSIONID.replaceAll(" ", "+");
+      if(!JSESSIONID.equals(tmpsession)){
+        logger.warn(session+",JSESSIONID Contains special characters,After the escape="+tmpsession);
+      }
+      session=(HttpSession)sessionMapBySessionid.get(tmpsession);
+      if(session!=null){
+        return session;
+      }
+      
+   }
+    //"http://120.25.127.141/runman-rest/rest/userinfo/modify.json?JSESSIONID=s6a3I+MMHVwIIq1-KAX4S0Iz.undefined";
+    //sessionid 包含+号的情况
     if(StringUtils.isNotBlank(JSESSIONID)){//使用JSESSIONID
       session=(HttpSession)sessionMapBySessionid.get(JSESSIONID);
       if(session!=null)return session;

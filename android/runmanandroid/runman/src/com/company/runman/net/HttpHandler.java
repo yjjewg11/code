@@ -2,13 +2,23 @@ package com.company.runman.net;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import com.company.runman.net.interfaces.IRequest;
 import com.company.runman.utils.Constant;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.UUID;
 
 /**
  * Created by Edison on 2014/6/6.
  */
 public class HttpHandler {
+
 
     /**
      * 一般的网络调用，如果需要登录，则重新登录，并重新调用接口

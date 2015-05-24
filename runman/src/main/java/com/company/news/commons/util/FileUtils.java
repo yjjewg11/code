@@ -12,7 +12,6 @@ import java.io.OutputStream;
 import java.util.Calendar;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
 
 import jcifs.smb.SmbFile;
 import jcifs.smb.SmbFileOutputStream;
@@ -22,10 +21,8 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.company.news.ProjectProperties;
 import com.company.news.SystemConstants;
 import com.company.news.rest.util.SmbFileUtil;
-import com.company.web.filter.UserInfoFilter;
 
 public class FileUtils {
   private static Logger logger = LoggerFactory.getLogger(FileUtils.class);

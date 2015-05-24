@@ -3,6 +3,7 @@
 	<name>runman</name>
 	<comment></comment>
 	<projects>
+		<project>runman-data-model</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

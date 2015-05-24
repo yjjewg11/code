@@ -165,7 +165,7 @@ public class TrainingPlanEditActivity extends BaseActivity {
             }
 
             }catch (Exception e){
-                TraceUtil.traceLog("ClassName:"+e.getMessage());
+                TraceUtil.traceLog(TAG+"::"+e.getMessage());
             }
 
             showProgress(getString(R.string.progress_text));

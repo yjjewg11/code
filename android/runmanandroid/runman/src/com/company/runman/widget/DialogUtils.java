@@ -39,7 +39,7 @@ public class DialogUtils {
         dateView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View actionView, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
                     String timeStr=dateView.getText().toString();
                     if(timeStr==null)timeStr=TimeUtils.getCurrentHourAndMinute();
                     final int hourOfDay=TimeUtils.getHourByTimeStr(timeStr);
@@ -72,11 +72,18 @@ public class DialogUtils {
         dateView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View actionView, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {//点击事件
+                /**
+                 * MotionEvent.ACTION_DOWN：在第一个点被按下时触发
+                 MotionEvent.ACTION_UP:当屏幕上唯一的点被放开时触发
+                 MotionEvent.ACTION_POINTER_DOWN:当屏幕上已经有一个点被按住，此时再按下其他点时触发。
+                 MotionEvent.ACTION_POINTER_UP:当屏幕上有多个点被按住，松开其中一个点时触发（即非最后一个点被放开时）。
+                 MotionEvent.ACTION_MOVE：当有点在屏幕上移动时触发。值得注意的是，由于它的灵敏度很高，而我们的手指又不可能完全静止（即使我们感觉不到移动，但其实我们的手指也在不停地抖动），所以实际的情况是，基本上只要有点在屏幕上，此事件就会一直不停地被触发。
+                 */
+                if (event.getAction() == MotionEvent.ACTION_UP) {//点击事件
                     String timeStr=dateView.getText().toString();
                     if(timeStr==null)timeStr=TimeUtils.getCurrentDateStr();
                      int year=TimeUtils.getYearByDateStr(timeStr);
-                     int monthOfYear= TimeUtils.getMonthByDateStr(timeStr);
+                     int monthOfYear= TimeUtils.getMonthByDateStr(timeStr)-1;
                      int dayOfMonth=TimeUtils.getDayByDateStr(timeStr);
                     /**
                      * 实例化一个DatePickerDialog的对象
@@ -88,7 +95,7 @@ public class DialogUtils {
                         public void onDateSet(DatePicker view, int year, int monthOfYear,
                                               int dayOfMonth)
                         {
-                            dateView.setText( year + "-" + monthOfYear + "-" + dayOfMonth);
+                            dateView.setText( year + "-" + (monthOfYear+1) + "-" + dayOfMonth);
                         }
                     }, year, monthOfYear, dayOfMonth);
 

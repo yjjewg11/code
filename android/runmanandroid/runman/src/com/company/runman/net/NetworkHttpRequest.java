@@ -2,6 +2,7 @@ package com.company.runman.net;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import com.company.runman.datacenter.provider.SharePreferenceProvider;
 import com.company.runman.net.interfaces.IRequest;
 import com.company.runman.net.utils.ConnectManager;
@@ -31,9 +32,7 @@ import org.apache.http.protocol.HttpContext;
 import org.json.JSONObject;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -145,6 +144,7 @@ public class NetworkHttpRequest {
         }
     }
 
+
     private static byte[] unzipData(InputStream gzis) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
@@ -156,6 +156,7 @@ public class NetworkHttpRequest {
             gzis.close();
             return baos.toByteArray();
         } catch (IOException e) {
+            TraceUtil.traceThrowableLog(e);
             LogHelper.e(TAG, "gzip error:", e);
         } finally {
             try {
@@ -660,6 +661,108 @@ public class NetworkHttpRequest {
             closeHttpClient(httpClient);
         }
 
+        return ret;
+    }
+
+
+    public static HttpReturn uploadFile(File file, String RequestURL) {
+        HttpReturn ret = new HttpReturn();
+        String result = null;
+        String BOUNDARY = UUID.randomUUID().toString(); // 边界标识 随机生成
+        String PREFIX = "--", LINE_END = "\r\n";
+        String CONTENT_TYPE = "multipart/form-data"; // 内容类型
+        URL url =null;
+        try {
+            try {
+                url = new URL(RequestURL);
+            } catch (Exception e) {
+                TraceUtil.traceThrowableLog(e);
+                ret.code = 400;
+                ret.err = e.getMessage();
+                return ret;
+            }
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(getImgTimeout());
+            conn.setConnectTimeout(getImgTimeout());
+            conn.setDoInput(true); // 允许输入流
+            conn.setDoOutput(true); // 允许输出流
+            conn.setUseCaches(false); // 不允许使用缓存
+            conn.setRequestMethod("POST"); // 请求方式
+            conn.setRequestProperty("Charset", HTTP.UTF_8); // 设置编码
+            conn.setRequestProperty("connection", "keep-alive");
+            conn.setRequestProperty("Content-Type", CONTENT_TYPE + ";boundary="+ BOUNDARY);
+
+            if("".equals(cookies)&&SharePreferenceProvider.getInstance(null)!=null)cookies=SharePreferenceProvider.getInstance(null).getCookies();
+            if(!"".equals(cookies)) {
+                conn.setRequestProperty("Cookie",cookies);
+            }
+            if (file != null) {
+                /**
+                 * 当文件不为空时执行上传
+                 */
+                DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
+                StringBuffer sb = new StringBuffer();
+                sb.append(PREFIX);
+                sb.append(BOUNDARY);
+                sb.append(LINE_END);
+                /**
+                 * 这里重点注意： name里面的值为服务器端需要key 只有这个key 才可以得到对应的文件
+                 * filename是文件的名字，包含后缀名
+                 */
+
+                sb.append("Content-Disposition: form-data; name=\"file\"; filename=\""
+                        + file.getName() + "\"" + LINE_END);
+                sb.append("Content-Type: application/octet-stream; charset="
+                        + HTTP.UTF_8 + LINE_END);
+                sb.append(LINE_END);
+                dos.write(sb.toString().getBytes());
+                InputStream is = new FileInputStream(file);
+                byte[] bytes = new byte[1024];
+                int len = 0;
+                while ((len = is.read(bytes)) != -1) {
+                    dos.write(bytes, 0, len);
+                }
+                is.close();
+                dos.write(LINE_END.getBytes());
+                byte[] end_data = (PREFIX + BOUNDARY + PREFIX + LINE_END)
+                        .getBytes();
+                dos.write(end_data);
+                dos.flush();
+                /**
+                 * 获取响应码 200=成功 当响应成功，获取响应的流
+                 */
+                ret.code = conn.getResponseCode();
+
+                if (ret.code == HttpStatus.SC_OK) {
+                    InputStream input = conn.getInputStream();
+
+                    ByteArrayOutputStream outstream = new ByteArrayOutputStream(4096);
+                    byte[] buffer = new byte[4096];
+                    int len1;
+                    while ((len1 = input.read(buffer)) > 0) {
+                        outstream.write(buffer, 0, len1);
+                    }
+                    input.close();
+                    ret.setBytes(outstream.toByteArray());
+                    //byte[] ba = outstream.toByteArray();
+//
+//                    StringBuffer sb1 = new StringBuffer();
+//                    int ss;
+//                    while ((ss = input.read()) != -1) {
+//                        sb1.append((char) ss);
+//                    }
+//                    String responseStr=sb1.toString();
+//                    ret.setBytes(responseStr.getBytes(HTTP.UTF_8));
+                  //  TraceUtil.traceLog("upload response:"+responseStr);
+                    // unzip body if needed
+                } else {
+                    TraceUtil.traceLog(TAG+",executeHttpPost code:" + ret.code + ", urlString:" + RequestURL);
+                }
+            }
+        }  catch (Exception e) {
+            TraceUtil.traceThrowableLog(e);
+            e.printStackTrace();
+        }
         return ret;
     }
 }

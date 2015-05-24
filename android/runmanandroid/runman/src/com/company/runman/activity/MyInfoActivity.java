@@ -6,14 +6,17 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.company.news.query.NSearchContion;
 import com.company.news.vo.TrainingPlanVO;
+import com.company.news.vo.UserInfoReturn;
 import com.company.runman.R;
 import com.company.runman.activity.Adapter.TrainingPlanAdapter;
 import com.company.runman.activity.base.BaseActivity;
+import com.company.runman.cache.ImgDownCache;
 import com.company.runman.datacenter.model.BaseResultEntity;
 import com.company.runman.datacenter.provider.SharePreferenceProvider;
 import com.company.runman.net.HttpControl;
@@ -35,7 +38,8 @@ import java.util.*;
  */
 public class MyInfoActivity extends BaseActivity {
     static public String TAG="MyInfoActivity";
-    private TextView myinfo_header;
+    private ImageView imageView_myhead;
+    private TextView name;
     private TextView myinfo_detail;
     private TextView modify_myinfo;
 
@@ -120,23 +124,40 @@ public class MyInfoActivity extends BaseActivity {
 
         baseListAdapter = new TrainingPlanAdapter(this);
         listView.setAdapter(baseListAdapter);
+        loadUserifoToshow();
+
+        new TraningPlanListMyAsyncTask(MyInfoActivity.this, 0).execute();
+    }
+
+    /**
+     * 加载用户信息
+     */
+    private  void loadUserifoToshow(){
         String userinfoStr = SharePreferenceProvider.getInstance(mContext).getUserinfo();
-        JSONObject jsonObject = null;
+        UserInfoReturn user=(UserInfoReturn)new GsonUtils().stringToObject(userinfoStr, UserInfoReturn.class);
         try {
-            jsonObject = new JSONObject(userinfoStr);
-            myinfo_header.setText(jsonObject.optString("name"));
-            myinfo_detail.setText(jsonObject.optString("name"));
+            name.setText(user.getName());
+            myinfo_detail.setText(user.getSex()==1?"女":"男"+" "+user.getCity());
+            if(!TextUtils.isEmpty(user.getHead_imgurl())) {
+                ImgDownCache.getInstance(mContext).displayImage(Constant.Host.BASE_HOST+user.getHead_imgurl(), imageView_myhead);
+            }
         } catch (Exception e) {
             TraceUtil.traceThrowableLog(e);
             TraceUtil.traceLog("userinfoStr="+userinfoStr);
             e.printStackTrace();
         }
-
-        new TraningPlanListMyAsyncTask(MyInfoActivity.this, 0).execute();
     }
 
     @Override
     protected void onResume() {
+//        Intent intent = this.getIntent();
+//        String userinfoStr =(String)intent.getSerializableExtra("userinfo_update");
+//        intent.removeExtra("userinfo_update");
+//        if(userinfoStr!=null){
+//            loadUserifoToshow();
+//        }
+
+        loadUserifoToshow();
         super.onResume();
 
     }
@@ -152,7 +173,8 @@ public class MyInfoActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        myinfo_header = (TextView) findViewById(R.id.myinfo_header);
+        imageView_myhead = (ImageView) findViewById(R.id.imageView_myhead);
+        name = (TextView) findViewById(R.id.name);
         myinfo_detail = (TextView) findViewById(R.id.myinfo_detail);
         modify_myinfo = (TextView) findViewById(R.id.modify_myinfo);
         modify_myinfo.setOnClickListener(this);
@@ -168,7 +190,8 @@ public class MyInfoActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.modify_myinfo:
-//                doAsyncTask();
+                Intent intent = new Intent(mContext, MyinfoModifyActivity.class);
+                mContext.startActivity(intent);
                 break;
             case R.id.add_training_plan:
                 IntentUtils.startTrainingPlanEditActivity(mContext, null);

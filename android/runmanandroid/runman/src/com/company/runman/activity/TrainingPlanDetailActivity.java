@@ -23,12 +23,12 @@ import org.apache.commons.lang.StringUtils;
  * Email:zhaoliangyu@sobey.com
  */
 public class TrainingPlanDetailActivity extends BaseActivity {
-    static private String ClassName="TrainingPlanEditActivity";
+    static private String ClassName="TrainingPlanDetailActivity";
 
     private TextView exercise_mode;
     private TextView start_date;
     private TextView start_to_end_time;
-    private TextView end_time;
+    //private TextView end_time;
     private TextView place;
     private TextView runKM;
     private TextView run_times;
@@ -62,7 +62,7 @@ public class TrainingPlanDetailActivity extends BaseActivity {
         price.setText(price.getText().toString()+Tool.objectToString(vo.getPrice()));
         start_date.setText(start_date.getText().toString()+TimeUtils.getDateString(vo.getStart_time()));
         start_to_end_time.setText(TimeUtils.getHourAndMinuteByDate(vo.getStart_time())+"-"+TimeUtils.getHourAndMinuteByDate(vo.getEnd_time()));
-        end_time.setText(end_time.getText().toString()+TimeUtils.getHourAndMinuteByDate(vo.getEnd_time()));
+     //   end_time.setText(end_time.getText().toString()+TimeUtils.getHourAndMinuteByDate(vo.getEnd_time()));
         place.setText(place.getText().toString()+Tool.objectToString(vo.getPlace()));
         
         
@@ -77,8 +77,7 @@ public class TrainingPlanDetailActivity extends BaseActivity {
         start_date = (TextView) findViewById(R.id.start_date);
 
         start_to_end_time=(TextView) findViewById(R.id.start_to_end_time);
-        end_time = (TextView) findViewById(R.id.end_time);
-        place = (TextView) findViewById(R.id.place);
+        place = (TextView) findViewById(R.id.palce);
         runKM = (TextView) findViewById(R.id.runKM);
         run_times = (TextView) findViewById(R.id.run_times);
         price = (TextView) findViewById(R.id.price);
