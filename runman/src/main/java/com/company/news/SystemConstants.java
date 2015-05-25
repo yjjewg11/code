@@ -10,8 +10,11 @@ public class SystemConstants {
     
     static public final String UploadFile_imgtype = "jpg";//马拉松认证照片 
 	 
-	 
-
+    //认证。默认0，0:没验证。1:验证。2：提交验证，3.验证失败
+    static public final String User_Verify_NO = "0";//用户验证状态-未验证
+    static public final String User_Verify_Pass = "1";//用户验证状态-验证通过
+    static public final String User_Verify_Apply = "2";//用户验证状态-提交验证
+    static public final String User_Verify_Fail= "3";//用户验证状态-验证失败
 }
 
 

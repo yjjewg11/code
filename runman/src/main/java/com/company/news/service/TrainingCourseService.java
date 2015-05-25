@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 
 import com.company.news.commons.util.DbUtils;
-import com.company.news.entity.TrainingPlan;
+import com.company.news.entity.TrainingCourse;
 import com.company.news.entity.User;
-import com.company.news.jsonform.TrainingPlanJsonform;
+import com.company.news.jsonform.TrainingCourseJsonform;
 import com.company.news.query.NSearchContion;
 import com.company.news.query.PageQueryResult;
 import com.company.news.query.PaginationData;
@@ -27,7 +27,7 @@ import com.company.web.listener.SessionListener;
  * 
  */
 @Service
-public class TrainingPlanService extends AbstractServcice {
+public class TrainingCourseService extends AbstractServcice {
 
 
   /**
@@ -42,23 +42,21 @@ public class TrainingPlanService extends AbstractServcice {
     
     User userInfo = SessionListener.getUserInfoBySession(request);
     ResponseMessage responseMessage = RestUtil.addResponseMessageForModelMap(model);
-    TrainingPlanJsonform form = (TrainingPlanJsonform)this.bodyJsonToFormObject(bodyJson, TrainingPlanJsonform.class);
+    TrainingCourseJsonform form = (TrainingCourseJsonform)this.bodyJsonToFormObject(bodyJson, TrainingCourseJsonform.class);
     //验证
     
-    
     //保存
-    TrainingPlan dbobj = (TrainingPlan)this.getEntityClass().newInstance();
+    TrainingCourse dbobj = (TrainingCourse)this.getEntityClass().newInstance();
     Properties properties = (Properties) this.bodyJsonToProperties(bodyJson);
     RestUtil.copyNotEmptyValueToobj(properties, form, dbobj);
     
     if(dbobj.getId()==null){//新建
       dbobj.setCreate_time(TimeUtils.getCurrentTimestamp());
       dbobj.setCreate_userid(userInfo.getId());
-      dbobj.setStatus(1);
-      
+      dbobj.setModify_time(TimeUtils.getCurrentTimestamp());
       this.nSimpleHibernateDao.save(dbobj);
     }else{
-      TrainingPlan entityDB =(TrainingPlan)this.nSimpleHibernateDao.getObject(this.getEntityClass(), dbobj.getId());
+      TrainingCourse entityDB =(TrainingCourse)this.nSimpleHibernateDao.getObject(this.getEntityClass(), dbobj.getId());
       if(entityDB==null){
         responseMessage.setStatus(RestConstants.Return_ResponseMessage_failed);
         responseMessage.setMessage("数据不存在！");
@@ -72,6 +70,8 @@ public class TrainingPlanService extends AbstractServcice {
       }
       //this.nSimpleHibernateDao.getHibernateTemplate().evict(entityDB);
       RestUtil.copyNotEmptyValueToobj(properties, form, entityDB);
+      entityDB.setModify_time(TimeUtils.getCurrentTimestamp());
+      
       this.nSimpleHibernateDao.getHibernateTemplate().update(entityDB);
     }
   
@@ -156,30 +156,44 @@ public class TrainingPlanService extends AbstractServcice {
   @Override
   public Class getEntityClass() {
     // TODO Auto-generated method stub
-    return TrainingPlan.class;
+    return TrainingCourse.class;
   }
 
 
 
-/**
- * 暂时屏蔽删除方式，等待权限加入启用
- * @param ids
- * @param request
- * @param model
- * @return
- */
+  /**
+   *
+   * 
+   * @param ids
+   * @param request
+   * @param model
+   * @return
+   */
   public ModelMap delete(String ids, HttpServletRequest request, ModelMap model) {
     // TODO Auto-generated method stub
     String[] _idstrs = ids.split(ID_SPLIT_MARK);
-    
+    ResponseMessage responseMessage = RestUtil.addResponseMessageForModelMap(model);
+    User userInfo = SessionListener.getUserInfoBySession(request);
     for (String idstr : _idstrs) {
       if (!"".equals(idstr) && null != idstr) {
-        Object dbobj = (Object) this.nSimpleHibernateDao.getObjectById(getEntityClass(),
-          Long.valueOf(idstr));
-//if(dbobj!=null)this.nSimpleHibernateDao.delete(dbobj);
+        TrainingCourse entityDB =
+            (TrainingCourse) this.nSimpleHibernateDao.getObjectById(getEntityClass(), Long.valueOf(idstr));
+        if(entityDB!=null){
+          responseMessage.setStatus(RestConstants.Return_ResponseMessage_failed);
+          responseMessage.setMessage("数据不存在！");
+          return model;
+        }
+         if(entityDB!=null){
+           if (!userInfo.getId().equals(entityDB.getCreate_userid())) {
+             responseMessage.setStatus(RestConstants.Return_ResponseMessage_failed);
+             responseMessage.setMessage("不是创建人，不能删除！");
+             return model;
+           }
+           this.nSimpleHibernateDao.delete(entityDB);
+         }
       }
-  }
-  ResponseMessage responseMessage = RestUtil.addResponseMessageForModelMap(model);
+    }
+   
     return model;
   }
 

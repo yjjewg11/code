@@ -109,9 +109,11 @@ public class UploadFileService extends AbstractServcice {
               this.nSimpleHibernateDao.save(userInfo);
             }else if(SystemConstants.UploadFile_type_identity_card.equals(uploadFile.getType())){
               userInfo.setIdentity_card_imgurl(uploadFilePath_url);
+             
               this.nSimpleHibernateDao.save(userInfo);
             }else if(SystemConstants.UploadFile_type_marathon.equals(uploadFile.getType())){
               userInfo.setMarathon_imgurl(uploadFilePath_url);
+             
               this.nSimpleHibernateDao.save(userInfo);
             }
             

@@ -34,11 +34,11 @@ public class User implements DBEntityInterface {
   @Column
   private String tel;//电话号码。
   @Column
-  private Integer tel_verify;//电话号码，验证。默认0，0:没验证。1:验证。
+  private Integer tel_verify;//电话号码，验证。默认0，0:没验证。1:验证，2：提交验证，3.验证失败
   @Column
   private String email;//email
   @Column
-  private String email_verify;//email,验证。默认0，0:没验证。1:验证。
+  private String email_verify;//email,验证。默认0，0:没验证。1:验证，2：提交验证，3.验证失败
   @Column
   private String real_name;//真实姓名
   @Column
@@ -48,7 +48,7 @@ public class User implements DBEntityInterface {
   @Column
   private String identity_card_imgurl;//上传身份证图片地址。用于认证
   @Column
-  private String real_name_verify;//实名认证。默认0，0:没验证。1:验证。2：提交验证
+  private String real_name_verify;//实名认证。默认0，0:没验证。1:验证。2：提交验证，3.验证失败
   @Column
   private Integer sex;//0:男,1:女
   @Column
@@ -72,7 +72,7 @@ public class User implements DBEntityInterface {
   @Column
   private String marathon_imgurl;//马拉松认证图片地址.
   @Column
-  private String marathon_verify;//马拉松认证状态。默认0，0:没验证。1:验证。2：提交验证
+  private String marathon_verify;//马拉松认证状态。默认0，0:没验证。1:验证。2：提交验证，3.验证失败
  
   
   

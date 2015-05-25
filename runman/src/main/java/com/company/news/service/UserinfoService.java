@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 
 import com.company.news.ProjectProperties;
+import com.company.news.SystemConstants;
 import com.company.news.entity.TelSmsCode;
 import com.company.news.entity.User;
 import com.company.news.form.UserLoginForm;
@@ -160,7 +161,16 @@ public class UserinfoService extends AbstractServcice {
     //保存
     Properties properties = (Properties) this.bodyJsonToProperties(bodyJson);
     RestUtil.copyNotEmptyValueToobj(properties, form, userDB);
-
+    
+    //增加教练认证和实名认证参数。
+    String type=(String)request.getAttribute("verify");
+    if("name".equals(type)){//实名认证
+      userInfo.setReal_name_verify(SystemConstants.User_Verify_Apply);
+    }else  if("marathon".equals(type)){//马拉松教练认证
+      userInfo.setReal_name_verify(SystemConstants.User_Verify_Apply);
+      userInfo.setMarathon_verify(SystemConstants.User_Verify_Apply);
+    }
+  
     try {
       this.nSimpleHibernateDao.save(userDB);
     } catch (DataIntegrityViolationException e) {
