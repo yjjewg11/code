@@ -8,9 +8,6 @@ import android.widget.TextView;
 import com.company.news.usershow.TrainingPlanUsershow;
 import com.company.news.vo.TrainingPlanVO;
 import com.company.runman.R;
-import com.company.runman.datacenter.database.DBHelper;
-import com.company.runman.datacenter.model.KeywordEntity;
-import com.company.runman.utils.AbstractAsyncTask;
 import com.company.runman.utils.TimeUtils;
 import com.company.runman.utils.TraceUtil;
 
@@ -48,7 +45,7 @@ public class TrainingPlanAdapter extends DefaultAdapter {
         HolderView holderView;
         //优化ListView
         if(convertView==null){
-            convertView=LayoutInflater.from(context).inflate(R.layout.traninng_plan_item, null);
+            convertView=LayoutInflater.from(context).inflate(R.layout.traininng_plan_item, null);
             HolderView h=new HolderView();
             h.start_day=(TextView)convertView.findViewById(R.id.start_day);
             h.place=(TextView)convertView.findViewById(R.id.place);

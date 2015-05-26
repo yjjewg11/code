@@ -66,6 +66,8 @@
                   android:launchMode="singleTask"/>
         <activity android:name="com.company.runman.activity.MyinfoModifyActivity"
                   android:launchMode="singleTask"/>
+        <activity android:name="com.company.runman.activity.CoachModifyActivity"
+                  android:launchMode="singleTask"/>
         <!--<activity android:name="com.company.runman.activity.CodeScanResultActivity"-->
                   <!--android:screenOrientation="portrait"/>-->
         <!--<activity android:name="com.company.runman.activity.CodeScanActivity"-->

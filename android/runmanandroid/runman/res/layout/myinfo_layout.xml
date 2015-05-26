@@ -66,9 +66,10 @@
                 android:layout_height="wrap_content"
                 android:text="更多"
                 android:id="@+id/button_more"/>
+
     </LinearLayout>
     <com.company.runman.widget.PullToRefreshListView
-            android:id="@+id/listViewMyTraningPlan"
+            android:id="@+id/listViewMytrainingPlan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:cacheColorHint="#00000000"

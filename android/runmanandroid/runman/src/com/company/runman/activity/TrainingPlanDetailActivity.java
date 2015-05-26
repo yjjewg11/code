@@ -109,7 +109,7 @@ public class TrainingPlanDetailActivity extends BaseActivity {
 
         @Override
         protected Object doInBackground(String[] params) {
-            String url="rest/traningPlan/save.json";
+            String url="rest/trainingPlan/save.json";
             DefaultRequest request= new DefaultRequest(mContext,url,Constant.RequestCode.REQUEST_POST);
             request.setData(form);
             HttpReturn httpReturn = HttpControl.execute(request, mContext);

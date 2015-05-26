@@ -58,7 +58,7 @@ public class MyInfoActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        new TraningPlanListMyAsyncTask(this).execute();
+        new trainingPlanListMyAsyncTask(this).execute();
     }
 
     @Override
@@ -68,17 +68,17 @@ public class MyInfoActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        listView = (PullToRefreshListView) findViewById(R.id.listViewMyTraningPlan);
+        listView = (PullToRefreshListView) findViewById(R.id.listViewMytrainingPlan);
         // Set a listener to be invoked when the list should be refreshed.
         listView.setOnRefreshListener(new PullToRefreshListView.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Do work to refresh the list here.
-                new TraningPlanListMyAsyncTask(MyInfoActivity.this, Constant.Query.Operate_Refresh).execute();
+                new trainingPlanListMyAsyncTask(MyInfoActivity.this, Constant.Query.Operate_Refresh).execute();
             }
             @Override
             public void onLoadMore() {
-                new TraningPlanListMyAsyncTask(MyInfoActivity.this, Constant.Query.Operate_LoadMore).execute();
+                new trainingPlanListMyAsyncTask(MyInfoActivity.this, Constant.Query.Operate_LoadMore).execute();
             }
         });
 
@@ -126,7 +126,7 @@ public class MyInfoActivity extends BaseActivity {
         listView.setAdapter(baseListAdapter);
         loadUserifoToshow();
 
-        new TraningPlanListMyAsyncTask(MyInfoActivity.this, 0).execute();
+        new trainingPlanListMyAsyncTask(MyInfoActivity.this, 0).execute();
     }
 
     /**
@@ -139,7 +139,7 @@ public class MyInfoActivity extends BaseActivity {
             name.setText(user.getName());
             myinfo_detail.setText(user.getSex()==1?"女":"男"+" "+user.getCity());
             if(!TextUtils.isEmpty(user.getHead_imgurl())) {
-                ImgDownCache.getInstance(mContext).displayImage(Constant.Host.BASE_HOST+user.getHead_imgurl(), imageView_myhead);
+                ImgDownCache.getInstance(mContext).displayImage(Tool.getFullUrl(user.getHead_imgurl()), imageView_myhead);
             }
         } catch (Exception e) {
             TraceUtil.traceThrowableLog(e);
@@ -200,6 +200,8 @@ public class MyInfoActivity extends BaseActivity {
                 showPopupWindow(view);
                 break;
         }
+
+
     }
 
 
@@ -211,14 +213,23 @@ public class MyInfoActivity extends BaseActivity {
         pop.setTouchable(true);
         pop.setOutsideTouchable(true);
         pop.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
+
+        ((Button) view.findViewById(R.id.button_Coach_mode)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, CoachModifyActivity.class);
+                startActivity(intent);
+                pop.dismiss();
+                // TODO Auto-generated method stub
+
+            }
+        });
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 pop.dismiss();
             }
         });
-
         pop.showAsDropDown(v);
     }
     /**
@@ -234,7 +245,7 @@ public class MyInfoActivity extends BaseActivity {
         @Override
         protected Object doInBackground(String[] params) {
 
-            String url = "rest/traningPlan/{uuid}.json";
+            String url = "rest/trainingPlan/{uuid}.json";
             url = url.replace("{uuid}", id);
             DefaultRequest request = new DefaultRequest(mContext, url, Constant.RequestCode.REQUEST_GET);
 
@@ -270,17 +281,17 @@ public class MyInfoActivity extends BaseActivity {
     /**
      * 查询训练计划
      */
-    private class TraningPlanListMyAsyncTask extends AbstractAsyncTask<String, Void, Object> {
+    private class trainingPlanListMyAsyncTask extends AbstractAsyncTask<String, Void, Object> {
 
         private Context context;
         private int operate;
         private NSearchContion nSearchContion;
 
-        public TraningPlanListMyAsyncTask(Context context, int operate) {
+        public trainingPlanListMyAsyncTask(Context context, int operate) {
             this.context = context;
             this.operate = operate;
         }
-        public TraningPlanListMyAsyncTask(Context context) {
+        public trainingPlanListMyAsyncTask(Context context) {
             this.context = context;
             this.operate = 0;
         }
@@ -294,7 +305,7 @@ public class MyInfoActivity extends BaseActivity {
                 nSearchContion.restPageNo();
             }
           //  nSearchContion .getPsoData().setPageNo(1);
-            String url = "rest/traningPlan/my.json";
+            String url = "rest/trainingPlan/my.json";
             DefaultRequest request = new DefaultRequest(mContext, url, Constant.RequestCode.REQUEST_GET);
             request.setParaObj(nSearchContion);
             HttpReturn httpReturn = HttpControl.execute(request, mContext);

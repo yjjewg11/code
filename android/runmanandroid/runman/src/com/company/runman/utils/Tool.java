@@ -74,6 +74,18 @@ public final class Tool {
         }
         return rate;
     }
+
+    /**
+     * 传入url，如果是相对路径，则加载配置的服务器地址返回，完整url
+     * @param url
+     * @return
+     */
+    public static String getFullUrl(String url){
+        if(url.indexOf("http://")==-1&&url.indexOf("https://")==-1){
+            return   Constant.Host.BASE_HOST+url;
+        }
+      return url;
+    }
     public static Double convertDouble(String valueStr) {
         Double rate = Double.longBitsToDouble(0);
         try {

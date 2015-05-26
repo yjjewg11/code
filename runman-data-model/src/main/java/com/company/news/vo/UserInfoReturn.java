@@ -12,6 +12,7 @@ public class UserInfoReturn implements java.io.Serializable{
     private String real_name;// 真实姓名
     private String identity_card;// 身份证号
     private String real_name_verify;//实名认证。默认0，0:没验证。1:验证。2：提交验证
+    private String identity_card_imgurl;//上传身份证图片地址。用于认证
     private Integer sex;// 0:男,1:女
     private String city;// 所在城市
     private String head_imgurl;//头像地址。
@@ -148,5 +149,13 @@ public class UserInfoReturn implements java.io.Serializable{
 
     public void setMarathon_verify(String marathon_verify) {
         this.marathon_verify = marathon_verify;
+    }
+
+    public String getIdentity_card_imgurl() {
+      return identity_card_imgurl;
+    }
+
+    public void setIdentity_card_imgurl(String identity_card_imgurl) {
+      this.identity_card_imgurl = identity_card_imgurl;
     }
 }

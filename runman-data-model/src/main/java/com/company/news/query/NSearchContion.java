@@ -16,6 +16,7 @@ public class NSearchContion {
   private String content;
   private String keyword;
   private String queryType;
+  private String userid;
   public String getQueryType() {
     return queryType;
   }
@@ -91,6 +92,21 @@ public class NSearchContion {
   }
   public void setType(String type) {
     this.type = type;
+  }
+  public String getUserid() {
+    return userid;
+  }
+  public void setUserid(String userid) {
+    this.userid = userid;
+  }
+  public static String getWORK() {
+    return WORK;
+  }
+  public static String getMONTH() {
+    return MONTH;
+  }
+  public static String getDAY() {
+    return DAY;
   }
 
   

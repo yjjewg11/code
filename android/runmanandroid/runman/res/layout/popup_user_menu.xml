@@ -28,4 +28,9 @@
             android:layout_height="wrap_content"
             android:text="设置"
             android:id="@+id/button_setting"/>
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="切换到教练模式"
+            android:id="@+id/button_Coach_mode"/>
 </LinearLayout>
