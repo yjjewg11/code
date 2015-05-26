@@ -56,7 +56,7 @@ public class TrainingPlan implements DBEntityInterface {
   @Column
   private Long  appraise_level;//评价级别。必填。1-5星。默认5星。
   @Column
-  private Long  appraise_context;//评价内容。可以不填写。
+  private Long  appraise_context;//评价内容。[最大300字数]可以不填写。
   @Column
   private Timestamp  appraise_time;//时间。
 

@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.company.news.query.NSearchContion;
+import com.company.news.query.UserRelationTrainingCourseSearchContion;
 import com.company.news.rest.util.RestUtil;
-import com.company.news.service.TrainingCourseService;
+import com.company.news.service.UserRelationTrainingCourseService;
 import com.company.news.springMVC.beans.propertyeditors.CustomTimestampEditor;
 import com.company.news.vo.ResponseMessage;
 
 @Controller
-public class TrainingCourseController {
+public class UserRelationTrainingCourseController {
 
   @InitBinder  
   public void initBinder(WebDataBinder binder) {   
@@ -40,18 +40,18 @@ public class TrainingCourseController {
   }   
 
   @Autowired
-  private TrainingCourseService trainingCourseService;
+  private UserRelationTrainingCourseService userRelationTrainingCourseService;
   /**
    * 保存（创建或更新）
    * @param model
    * @param request
    * @return
    */
-  @RequestMapping(value = "/trainingCourse/save", method = RequestMethod.POST)
+  @RequestMapping(value = "/userRelationTrainingCourse/save", method = RequestMethod.POST)
   public String save( ModelMap model, HttpServletRequest request) {
     String bodyJson=RestUtil.getJsonStringByRequest(request);
       try {
-        trainingCourseService.save(bodyJson, model, request);
+        userRelationTrainingCourseService.save(bodyJson, model, request);
       } catch (Exception e) {
         e.printStackTrace();
         ResponseMessage responseMessage = RestUtil.addResponseMessageForModelMap(model);
@@ -61,10 +61,10 @@ public class TrainingCourseController {
       return "";
   }
   
-  @RequestMapping(value = "/trainingCourse/{uuid}", method = RequestMethod.GET)
+  @RequestMapping(value = "/userRelationTrainingCourse/{uuid}", method = RequestMethod.GET)
   public String get(@PathVariable("uuid") String uuid, ModelMap model,HttpServletRequest request) {
     try {
-      trainingCourseService.get(uuid, model,request);
+      userRelationTrainingCourseService.get(uuid, model,request);
     } catch (Exception e) {
       e.printStackTrace();
       ResponseMessage responseMessage = RestUtil.addResponseMessageForModelMap(model);
@@ -75,31 +75,17 @@ public class TrainingCourseController {
     return "";
   }
   
-  @RequestMapping(value = "/trainingCourse/my", method = RequestMethod.GET)
-   public String indexMy(NSearchContion sc, ModelMap model,HttpServletRequest request) {
-    sc.setType("my");
-    trainingCourseService.index(sc, model,request);
+  @RequestMapping(value = "/userRelationTrainingCourse/query", method = RequestMethod.GET)
+   public String query(UserRelationTrainingCourseSearchContion sc, ModelMap model,HttpServletRequest request) {
+    userRelationTrainingCourseService.index(sc, model,request);
     return "";
   }
   
-  /**
-   * 查询发布状态
-   * @param sc
-   * @param model
-   * @param request
-   * @return
-   */
-  @RequestMapping(value = "/trainingCourse/queryPublish", method = RequestMethod.GET)
-  public String queryPublish(NSearchContion sc, ModelMap model,HttpServletRequest request) {
-    sc.setType("queryPublish");
-   trainingCourseService.index(sc, model,request);
-   return "";
- }
   
-  @RequestMapping(value = "/trainingCourse/my/{ids}", method = RequestMethod.DELETE)
+  @RequestMapping(value = "/userRelationTrainingCourse/my/{ids}", method = RequestMethod.DELETE)
   public String delete(@PathVariable("ids") String ids,HttpServletRequest request, ModelMap model) {
     // TODO Auto-generated method stub
-    trainingCourseService.delete(ids, request,model);  
+    userRelationTrainingCourseService.delete(ids, request,model);  
     return "";
   }
 }

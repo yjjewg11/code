@@ -11,7 +11,7 @@ public class TrainingCourseJsonform extends AbstractJsonform{
   private Long id;//主键 
   private Integer exercise_mode;//[必填]锻炼方式.枚举值：1.普通跑步(默认)。2.马拉松
   private String title;//课程名称【必填】，20字符
-  private String time_length;//课程时长【必填】，单位分钟
+  private Integer time_length;//课程时长【必填】，单位分钟
   private Integer difficulty_degree;//课程难度。1-5星。
   private Integer max_students;//授课人数限制。默认1.
   private String context;//授课内容，自由填写。不限字数
@@ -45,12 +45,12 @@ public class TrainingCourseJsonform extends AbstractJsonform{
   }
 
 
-  public String getTime_length() {
+  public Integer getTime_length() {
     return time_length;
   }
 
 
-  public void setTime_length(String time_length) {
+  public void setTime_length(Integer time_length) {
     this.time_length = time_length;
   }
 

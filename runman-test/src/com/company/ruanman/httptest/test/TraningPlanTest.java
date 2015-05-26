@@ -59,7 +59,7 @@ public class TraningPlanTest  extends AbstractHttpTest {
       String json=JSONUtils.getJsonString(form);
       HttpUtils.printjson(json);
       ByteArrayInputStream input=new ByteArrayInputStream(json.getBytes(Constants.Charset));
-      PostMethodWebRequest  request = new PostMethodWebRequest( TestConstants.host+"rest/traningPlan/save.json"+user.addParameter_JSESSIONID(),input,TestConstants.contentType );
+      PostMethodWebRequest  request = new PostMethodWebRequest( TestConstants.host+"rest/trainingPlan/save.json"+user.addParameter_JSESSIONID(),input,TestConstants.contentType );
       request.setParameter(RestConstants.Return_JSESSIONID, user.getLoginSessionid());
       WebResponse response = tryGetResponse(conversation, request );
        

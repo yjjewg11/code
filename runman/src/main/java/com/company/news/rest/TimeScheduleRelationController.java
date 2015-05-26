@@ -76,26 +76,12 @@ public class TimeScheduleRelationController {
     return "";
   }
   
-  @RequestMapping(value = "/timeScheduleRelation/my", method = RequestMethod.GET)
-   public String indexMy(TimeScheduleRelationSearchContion sc, ModelMap model,HttpServletRequest request) {
-    sc.setType("my");
+  @RequestMapping(value = "/timeScheduleRelation/query", method = RequestMethod.GET)
+   public String query(TimeScheduleRelationSearchContion sc, ModelMap model,HttpServletRequest request) {
     timeScheduleRelationService.index(sc, model,request);
     return "";
   }
   
-  /**
-   * 查询发布状态
-   * @param sc
-   * @param model
-   * @param request
-   * @return
-   */
-  @RequestMapping(value = "/timeScheduleRelation/queryPublish", method = RequestMethod.GET)
-  public String queryPublish(TimeScheduleRelationSearchContion sc, ModelMap model,HttpServletRequest request) {
-    sc.setType("queryPublish");
-   timeScheduleRelationService.index(sc, model,request);
-   return "";
- }
   
   @RequestMapping(value = "/timeScheduleRelation/my/{ids}", method = RequestMethod.DELETE)
   public String delete(@PathVariable("ids") String ids,HttpServletRequest request, ModelMap model) {

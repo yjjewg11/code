@@ -94,7 +94,6 @@
         <tx:method name="show*" read-only="true"/>  
         <tx:method name="operate*" read-only="true"/>  
         <tx:method name="edit*" read-only="true"/>
-        <tx:method name="get*" read-only="true"/>
         
         <tx:method name="*" propagation="REQUIRED" rollback-for="Throwable"/>  
     </tx:attributes>  

@@ -32,7 +32,7 @@ public class TrainingCourse implements DBEntityInterface {
   @Column
   private String title;//课程名称【必填】，20字符
   @Column
-  private String time_length;//课程时长【必填】，单位分钟
+  private Integer time_length;//课程时长【必填】，单位分钟
   @Column
   private Integer difficulty_degree;//课程难度。1-5星。
   @Column
@@ -42,11 +42,11 @@ public class TrainingCourse implements DBEntityInterface {
   @Column
   private String place;//授课地点。40字符
   @Column
-  private String status;//状态。1：发布。0：关闭。
+  private Integer status;//状态。1：发布。0：关闭。
   @Column
   private Double price;//[必填]发布价格 1~9999
   @Column
-  
+  private Long read_count;//被人阅读次数统计
   
   @Override
   public Long getId() {
@@ -105,12 +105,12 @@ public class TrainingCourse implements DBEntityInterface {
   }
 
 
-  public String getTime_length() {
+  public Integer getTime_length() {
     return time_length;
   }
 
 
-  public void setTime_length(String time_length) {
+  public void setTime_length(Integer time_length) {
     this.time_length = time_length;
   }
 
@@ -169,13 +169,23 @@ public class TrainingCourse implements DBEntityInterface {
   }
 
 
-  public String getStatus() {
+  public Integer getStatus() {
     return status;
   }
 
 
-  public void setStatus(String status) {
+  public void setStatus(Integer status) {
     this.status = status;
+  }
+
+
+  public Long getRead_count() {
+    return read_count;
+  }
+
+
+  public void setRead_count(Long read_count) {
+    this.read_count = read_count;
   }
 
 }

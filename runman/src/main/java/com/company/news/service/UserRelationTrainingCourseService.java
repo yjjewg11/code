@@ -9,13 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 
 import com.company.news.commons.util.DbUtils;
-import com.company.news.entity.TimeScheduleRelation;
 import com.company.news.entity.User;
-import com.company.news.jsonform.TimeScheduleRelationJsonform;
-import com.company.news.query.NSearchContion;
+import com.company.news.entity.UserRelationTrainingCourse;
+import com.company.news.jsonform.UserRelationTrainingCourseJsonform;
 import com.company.news.query.PageQueryResult;
 import com.company.news.query.PaginationData;
-import com.company.news.query.TimeScheduleRelationSearchContion;
+import com.company.news.query.UserRelationTrainingCourseSearchContion;
 import com.company.news.rest.RestConstants;
 import com.company.news.rest.util.RestUtil;
 import com.company.news.rest.util.TimeUtils;
@@ -27,9 +26,7 @@ import com.company.web.listener.SessionListener;
  * 
  */
 @Service
-public class TimeScheduleRelationService extends AbstractServcice {
-
-
+public class UserRelationTrainingCourseService extends AbstractServcice {
   /**
    * 保存
    * 
@@ -44,35 +41,23 @@ public class TimeScheduleRelationService extends AbstractServcice {
 
     User userInfo = SessionListener.getUserInfoBySession(request);
     ResponseMessage responseMessage = RestUtil.addResponseMessageForModelMap(model);
-    TimeScheduleRelationJsonform form =
-        (TimeScheduleRelationJsonform) this.bodyJsonToFormObject(bodyJson,
-            TimeScheduleRelationJsonform.class);
+    UserRelationTrainingCourseJsonform form =
+        (UserRelationTrainingCourseJsonform) this.bodyJsonToFormObject(bodyJson,
+            UserRelationTrainingCourseJsonform.class);
     // 验证
-    if (form.getRelation_id()==null) {
+    if (form.getCourse_id()==null) {
       responseMessage.setStatus(RestConstants.Return_ResponseMessage_failed);
-      responseMessage.setMessage("属性 relation_id 不能为空");
+      responseMessage.setMessage("属性 course_id 不能为空");
       return model;
 
     }
-    if (form.getType() == null) {
+    if (form.getTime_schedule_id() == null) {
       responseMessage.setStatus(RestConstants.Return_ResponseMessage_failed);
-      responseMessage.setMessage("属性 type 不能为空");
+      responseMessage.setMessage("属性 Time_schedule_id 不能为空");
       return model;
-    }
-    if (StringUtils.isBlank(form.getStart_time())) {
-      responseMessage.setStatus(RestConstants.Return_ResponseMessage_failed);
-      responseMessage.setMessage("属性 Start_time 不能为空");
-      return model;
-
-    }
-    if (StringUtils.isBlank(form.getEnd_time())) {
-      responseMessage.setStatus(RestConstants.Return_ResponseMessage_failed);
-      responseMessage.setMessage("属性 End_time 不能为空");
-      return model;
-
     }
     // 保存
-    TimeScheduleRelation dbobj = (TimeScheduleRelation) this.getEntityClass().newInstance();
+    UserRelationTrainingCourse dbobj = (UserRelationTrainingCourse) this.getEntityClass().newInstance();
     Properties properties = (Properties) this.bodyJsonToProperties(bodyJson);
     RestUtil.copyNotEmptyValueToobj(properties, form, dbobj);
     if(Long.valueOf(0).equals(dbobj.getId())){
@@ -80,11 +65,11 @@ public class TimeScheduleRelationService extends AbstractServcice {
     }
     if (dbobj.getId() == null) {// 新建
       dbobj.setCreate_time(TimeUtils.getCurrentTimestamp());
-      dbobj.setCreate_userid(userInfo.getId());
+      dbobj.setUser_id(userInfo.getId());
       this.nSimpleHibernateDao.save(dbobj);
     } else {
-      TimeScheduleRelation entityDB =
-          (TimeScheduleRelation) this.nSimpleHibernateDao.getObject(this.getEntityClass(), dbobj
+      UserRelationTrainingCourse entityDB =
+          (UserRelationTrainingCourse) this.nSimpleHibernateDao.getObject(this.getEntityClass(), dbobj
               .getId());
       if (entityDB == null) {
         responseMessage.setStatus(RestConstants.Return_ResponseMessage_failed);
@@ -92,7 +77,7 @@ public class TimeScheduleRelationService extends AbstractServcice {
         return model;
       }
 
-      if (!userInfo.getId().equals(entityDB.getCreate_userid())) {
+      if (!userInfo.getId().equals(entityDB.getUser_id())) {
         responseMessage.setStatus(RestConstants.Return_ResponseMessage_failed);
         responseMessage.setMessage("不是创建人，没有修改权限！");
         return model;
@@ -136,18 +121,18 @@ public class TimeScheduleRelationService extends AbstractServcice {
 
 
 
-  public ModelMap index(TimeScheduleRelationSearchContion sc, ModelMap model, HttpServletRequest request) {
+  public ModelMap index(UserRelationTrainingCourseSearchContion sc, ModelMap model, HttpServletRequest request) {
     model.clear();
     ResponseMessage responseMessage = RestUtil.addResponseMessageForModelMap(model);
     
-    if (StringUtils.isEmpty(sc.getType())) {
+    if (sc.getCourse_id()==null) {
       responseMessage.setStatus(RestConstants.Return_ResponseMessage_failed);
-      responseMessage.setMessage("查询条件 type 不能未空");
+      responseMessage.setMessage("查询条件 course_id 不能未空");
       return model;
     }
-    if (sc.getRelation_id()==null) {
+    if (sc.getTime_schedule_id()==null) {
       responseMessage.setStatus(RestConstants.Return_ResponseMessage_failed);
-      responseMessage.setMessage("查询条件 Relation_id 不能未空");
+      responseMessage.setMessage("查询条件 time_schedule_id 不能未空");
       return model;
     }
     User userInfo = SessionListener.getUserInfoBySession(request);
@@ -156,27 +141,17 @@ public class TimeScheduleRelationService extends AbstractServcice {
     String hql = "from " + this.getEntityClass().getName();
 
     StringBuffer sb = new StringBuffer();
-    if (StringUtils.isNotEmpty(sc.getStartTime())) {
-      sb.append(" and create_time >= ").append(DbUtils.stringToDateByDBType(sc.getStartTime()));
-    }
 
-    if (StringUtils.isNotEmpty(sc.getType())) {
-      sb.append(" and type = ").append(sc.getType());
+    if (sc.getCourse_id()!=null) {
+      sb.append(" and course_id = ").append(sc.getCourse_id());
     }
-    if (sc.getRelation_id()!=null) {
-      sb.append(" and relation_id = ").append(sc.getRelation_id());
+    if (sc.getTime_schedule_id()!=null) {
+      sb.append(" and time_schedule_id = ").append(sc.getTime_schedule_id());
     }
     
-    
-//
-//    if ("my".equals(sc.getType())) {// 查询我的
-//      sb.append(" and create_userid = ").append(userInfo.getId());
-//    } else if ("queryPublish".equals(sc.getType())) {// 查询发布的
-//      sb.append(" and status = 1");
-//    }
 
     PaginationData pData = sc.getPsoData();
-    pData.setOrderFiled("start_time");
+    pData.setOrderFiled("id");
     pData.setOrderType("asc");
 
     if (sb.length() > 0) {
@@ -202,7 +177,7 @@ public class TimeScheduleRelationService extends AbstractServcice {
   @Override
   public Class getEntityClass() {
     // TODO Auto-generated method stub
-    return TimeScheduleRelation.class;
+    return UserRelationTrainingCourse.class;
   }
 
 
@@ -222,15 +197,15 @@ public class TimeScheduleRelationService extends AbstractServcice {
     User userInfo = SessionListener.getUserInfoBySession(request);
     for (String idstr : _idstrs) {
       if (!"".equals(idstr) && null != idstr) {
-        TimeScheduleRelation entityDB =
-            (TimeScheduleRelation) this.nSimpleHibernateDao.getObjectById(getEntityClass(), Long.valueOf(idstr));
+        UserRelationTrainingCourse entityDB =
+            (UserRelationTrainingCourse) this.nSimpleHibernateDao.getObjectById(getEntityClass(), Long.valueOf(idstr));
         if(entityDB!=null){
           responseMessage.setStatus(RestConstants.Return_ResponseMessage_failed);
           responseMessage.setMessage("数据不存在！");
           return model;
         }
          if(entityDB!=null){
-           if (!userInfo.getId().equals(entityDB.getCreate_userid())) {
+           if (!userInfo.getId().equals(entityDB.getUser_id())) {
              responseMessage.setStatus(RestConstants.Return_ResponseMessage_failed);
              responseMessage.setMessage("不是创建人，不能删除！");
              return model;

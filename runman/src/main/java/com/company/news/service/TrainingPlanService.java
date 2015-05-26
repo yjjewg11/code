@@ -50,7 +50,9 @@ public class TrainingPlanService extends AbstractServcice {
     TrainingPlan dbobj = (TrainingPlan)this.getEntityClass().newInstance();
     Properties properties = (Properties) this.bodyJsonToProperties(bodyJson);
     RestUtil.copyNotEmptyValueToobj(properties, form, dbobj);
-    
+    if(Long.valueOf(0).equals(dbobj.getId())){
+      dbobj.setId(null);
+    }
     if(dbobj.getId()==null){//新建
       dbobj.setCreate_time(TimeUtils.getCurrentTimestamp());
       dbobj.setCreate_userid(userInfo.getId());

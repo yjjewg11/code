@@ -8,7 +8,6 @@ package com.company.news.jsonform;
  */
 public class TimeScheduleRelationJsonform extends AbstractJsonform{
   private Long id;//主键
-  private Long create_userid;//创建用户id
   private Integer type;//类型。1：关联课程时段。2：关联教练可授课时间段
   private Long relation_id;//关联对象id。与type配合使用确定关联对象。
   private Integer time_period;//[必填]时间周期设置。1：表示每周。2：表示每天。3：表示每月
@@ -20,12 +19,6 @@ public class TimeScheduleRelationJsonform extends AbstractJsonform{
   }
   public void setId(Long id) {
     this.id = id;
-  }
-  public Long getCreate_userid() {
-    return create_userid;
-  }
-  public void setCreate_userid(Long create_userid) {
-    this.create_userid = create_userid;
   }
   public Integer getType() {
     return type;

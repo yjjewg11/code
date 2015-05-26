@@ -38,9 +38,9 @@ public class UserRelationTrainingCourse implements DBEntityInterface {
   @Column
   private Timestamp complete_time;//关闭时间
   @Column
-  private Long  appraise_level;//评价级别。必填。1-5星。默认5星。
+  private Integer  appraise_level;//评价级别。必填。1-5星。默认5星。
   @Column
-  private Long  appraise_context;//评价内容。可以不填写。
+  private String  appraise_context;//评价内容。[最大300字数]可以不填写。
   @Column
   private Timestamp  appraise_time;//时间。
   
@@ -122,22 +122,22 @@ public class UserRelationTrainingCourse implements DBEntityInterface {
   }
 
 
-  public Long getAppraise_level() {
+  public Integer getAppraise_level() {
     return appraise_level;
   }
 
 
-  public void setAppraise_level(Long appraise_level) {
+  public void setAppraise_level(Integer appraise_level) {
     this.appraise_level = appraise_level;
   }
 
 
-  public Long getAppraise_context() {
+  public String getAppraise_context() {
     return appraise_context;
   }
 
 
-  public void setAppraise_context(Long appraise_context) {
+  public void setAppraise_context(String appraise_context) {
     this.appraise_context = appraise_context;
   }
 

@@ -49,11 +49,15 @@ public class TrainingCourseService extends AbstractServcice {
     TrainingCourse dbobj = (TrainingCourse)this.getEntityClass().newInstance();
     Properties properties = (Properties) this.bodyJsonToProperties(bodyJson);
     RestUtil.copyNotEmptyValueToobj(properties, form, dbobj);
-    
+    if(Long.valueOf(0).equals(dbobj.getId())){
+      dbobj.setId(null);
+    }
     if(dbobj.getId()==null){//新建
       dbobj.setCreate_time(TimeUtils.getCurrentTimestamp());
       dbobj.setCreate_userid(userInfo.getId());
       dbobj.setModify_time(TimeUtils.getCurrentTimestamp());
+      dbobj.setStatus(1);
+      dbobj.setRead_count(0l);
       this.nSimpleHibernateDao.save(dbobj);
     }else{
       TrainingCourse entityDB =(TrainingCourse)this.nSimpleHibernateDao.getObject(this.getEntityClass(), dbobj.getId());
@@ -101,6 +105,8 @@ public class TrainingCourseService extends AbstractServcice {
       responseMessage.setMessage("数据不存在！");
       return model;
     }
+    String bkhql="update TrainingCourse set read_count=read_count+1 where id=?";
+    this.nSimpleHibernateDao.getHibernateTemplate().bulkUpdate(bkhql,  new Object[]{Long.valueOf(uuid)});
     model.addAttribute(RestConstants.Return_G_entity, o);
     return model;
   }

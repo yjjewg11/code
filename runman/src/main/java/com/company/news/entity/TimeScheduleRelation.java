@@ -10,13 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * 用户的时段设置。
+ * 用户的时段设置表。
  * 用法一：关联课程。课程1对多个时段
  * 用法二：教练可授课时间段
  *
  */
 @Entity
-@Table(name="time_schedule_relation") 
+@Table(name="run_time_schedule_relation") 
 public class TimeScheduleRelation implements DBEntityInterface {
   @Id
   @GeneratedValue(strategy=GenerationType.AUTO)
